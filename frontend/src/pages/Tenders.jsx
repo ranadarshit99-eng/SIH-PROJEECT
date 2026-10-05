@@ -3,7 +3,7 @@ import { Search, Building2, Calendar, Clock, ArrowRight, X, Filter } from 'lucid
 import Navbar from '../components/Navbar';
 import UserHeader from '../components/UserHeader';
 import TenderDetailModal from '../components/TenderDetailModal';
-import { useTenderContext } from '../context/TenderContext';
+import { useTenderContext, getVolatileTenderDates } from '../context/TenderContext';
 import { useAuth } from '../context/AuthContext';
 
 const Tenders = () => {
@@ -140,12 +140,12 @@ const Tenders = () => {
 
                       <div className="flex items-center gap-2">
                         <Calendar size={14} className="text-slate-400 shrink-0" />
-                        <span>Published: <strong className="font-semibold text-slate-700">{tender.publishedDate || '18 Sep 2026'}</strong></span>
+                        <span>Published: <strong className="font-semibold text-slate-700">{getVolatileTenderDates(tender).publishedDate}</strong></span>
                       </div>
 
                       <div className="flex items-center gap-2">
                         <Clock size={14} className="text-slate-400 shrink-0" />
-                        <span>Closing: <strong className="font-semibold text-slate-700">{tender.closingDate || tender.deadline || '04 Oct 2026'}</strong></span>
+                        <span>Closing: <strong className="font-semibold text-slate-700">{getVolatileTenderDates(tender).closingDate}</strong></span>
                       </div>
                     </div>
                   </div>

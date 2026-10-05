@@ -6,7 +6,7 @@ import {
   Home, FileSearch, User, LogOut, Bell, Calendar, Download, Settings, ClipboardList, Search, Landmark, Sparkles, Cpu,
   Award, TrendingUp, ThumbsUp, Globe, MessageSquare, ShieldCheck
 } from 'lucide-react';
-import { useTenderContext, STANDARD_DOCUMENTS, resolveDocumentVerification } from '../context/TenderContext';
+import { useTenderContext, STANDARD_DOCUMENTS, resolveDocumentVerification, getVolatileTenderDates } from '../context/TenderContext';
 import { useAuth } from '../context/AuthContext';
 import { API_BASE } from '../apiConfig';
 import Navbar from '../components/Navbar';
@@ -611,7 +611,7 @@ const Government = () => {
                               <span className="font-mono text-[11px] font-extrabold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
                                 {tender.id}
                               </span>
-                              <span className="text-[11px] text-slate-500 font-medium">Closing Date: {tender.closingDate || '30 Sep 2026'}</span>
+                              <span className="text-[11px] text-slate-500 font-medium">Closing Date: {getVolatileTenderDates(tender).closingDate}</span>
                             </div>
                             <h3 className="font-bold text-slate-900 text-sm mt-1 leading-snug">
                               {tender.title}
@@ -1353,11 +1353,11 @@ const Government = () => {
             <div className="flex items-center gap-6 bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-xs shrink-0">
               <div>
                 <span className="text-[10px] text-slate-400 font-bold uppercase block">Published Date</span>
-                <span className="font-extrabold text-slate-800">{new Date(selectedTenderForReview.createdAt).toLocaleDateString()}</span>
+                <span className="font-extrabold text-slate-800">{getVolatileTenderDates(selectedTenderForReview).publishedDate}</span>
               </div>
               <div className="border-l border-slate-200 pl-4">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block">Closing Date</span>
-                <span className="font-extrabold text-slate-800">{selectedTenderForReview.closingDate || '30 Sep 2026'}</span>
+                <span className="font-extrabold text-slate-800">{getVolatileTenderDates(selectedTenderForReview).closingDate}</span>
               </div>
               <div className="border-l border-slate-200 pl-4">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block">Bids Received</span>

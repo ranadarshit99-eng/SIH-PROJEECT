@@ -2,12 +2,14 @@ import React from 'react';
 import { X, Calendar, Clock, Building2, ShieldCheck, FileText, DollarSign, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getVolatileTenderDates } from '../context/TenderContext';
 
 const TenderDetailModal = ({ tender, onClose }) => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
   if (!tender) return null;
+  const dates = getVolatileTenderDates(tender);
 
   const handleApply = () => {
     onClose();
@@ -66,7 +68,7 @@ const TenderDetailModal = ({ tender, onClose }) => {
               <Calendar size={14} className="text-blue-500" />
               <span>Published Date</span>
             </div>
-            <div className="font-bold text-slate-900 text-sm">{tender.publishedDate || '18 Sep 2026'}</div>
+            <div className="font-bold text-slate-900 text-sm">{dates.publishedDate}</div>
           </div>
 
           <div className="bg-slate-50 border border-slate-100 p-3.5 rounded-xl">
@@ -74,7 +76,7 @@ const TenderDetailModal = ({ tender, onClose }) => {
               <Clock size={14} className="text-amber-500" />
               <span>Closing Date</span>
             </div>
-            <div className="font-bold text-slate-900 text-sm">{tender.closingDate || tender.deadline || '04 Oct 2026'}</div>
+            <div className="font-bold text-slate-900 text-sm">{dates.closingDate}</div>
           </div>
 
           <div className="bg-slate-50 border border-slate-100 p-3.5 rounded-xl">

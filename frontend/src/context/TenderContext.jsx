@@ -142,120 +142,175 @@ export const resolveDocumentVerification = (field, fileName, existingVerif, bidd
   };
 };
 
-export const INITIAL_TENDERS = [
-  {
-    id: 'TN/2026/001',
-    title: 'Supply of IT Equipment',
-    description: 'Procurement and delivery of laptops, desktop computers, server racks, and peripherals for government IT modernization.',
-    department: 'Department of Information Technology',
-    budget: '₹4.50 Crores',
-    publishedDate: '20 Sep 2026',
-    closingDate: '30 Sep 2026',
-    deadline: '2026-09-30',
-    status: 'New',
-    created_by_officer_name: 'Dr. Rajesh Kumar Varma',
-    createdAt: '2026-09-20T10:00:00.000Z',
-    fields: [
-      { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
-      { id: 'f_2', label: 'Bid Amount (INR)', type: 'text', required: true },
-      { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
-      { id: 'doc_pan', label: 'PAN Card', type: 'file', docType: 'pan', required: true },
-      { id: 'doc_financial', label: 'Financial Statement', type: 'file', docType: 'financial', required: true }
-    ]
-  },
-  {
-    id: 'TN/2026/002',
-    title: 'Office Furniture Procurement',
-    description: 'Supply of ergonomic chairs, modular desks, conference tables, and storage cabinets for public works office complex.',
-    department: 'Public Works Department',
-    budget: '₹1.80 Crores',
-    publishedDate: '18 Sep 2026',
-    closingDate: '04 Oct 2026',
-    deadline: '2026-10-04',
-    status: 'New',
-    created_by_officer_name: 'Dr. Rajesh Kumar Varma',
-    createdAt: '2026-09-18T10:00:00.000Z',
-    fields: [
-      { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
-      { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
-      { id: 'doc_msme', label: 'MSME Certificate', type: 'file', docType: 'msme', required: true }
-    ]
-  },
-  {
-    id: 'TN/2026/003',
-    title: 'Network Infrastructure',
-    description: 'Establishment of high-speed optical fiber backbone, managed network switches, firewall security, and Wi-Fi access points.',
-    department: 'National Informatics Centre',
-    budget: '₹12.50 Crores',
-    publishedDate: '16 Sep 2026',
-    closingDate: '05 Oct 2026',
-    deadline: '2026-10-05',
-    status: 'New',
-    created_by_officer_name: 'Dr. Rajesh Kumar Varma',
-    createdAt: '2026-09-16T10:00:00.000Z',
-    fields: [
-      { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
-      { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
-      { id: 'doc_iso', label: 'ISO Certificate', type: 'file', docType: 'iso', required: true },
-      { id: 'doc_oem', label: 'OEM Authorization', type: 'file', docType: 'oem', required: true }
-    ]
-  },
-  {
-    id: 'TN/2026/004',
-    title: 'Supply and Installation of CCTV Systems',
-    description: 'Turnkey installation of IP-based CCTV surveillance cameras, control center video wall, and AI video analytics software.',
-    department: 'Home Department',
-    budget: '₹8.20 Crores',
-    publishedDate: '15 Sep 2026',
-    closingDate: '02 Oct 2026',
-    deadline: '2026-10-02',
-    status: 'Active',
-    created_by_officer_name: 'Dr. Rajesh Kumar Varma',
-    createdAt: '2026-09-15T10:00:00.000Z',
-    fields: [
-      { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
-      { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
-      { id: 'doc_bis', label: 'BIS Certificate', type: 'file', docType: 'bis', required: true }
-    ]
-  },
-  {
-    id: 'TN/2026/005',
-    title: 'Medical Equipment Supply',
-    description: 'Procurement of diagnostic imaging machines, patient monitors, ICU ventilators, and lab equipment for district hospitals.',
-    department: 'Health & Family Welfare',
-    budget: '₹24.00 Crores',
-    publishedDate: '14 Sep 2026',
-    closingDate: '01 Oct 2026',
-    deadline: '2026-10-01',
-    status: 'Active',
-    created_by_officer_name: 'Dr. Rajesh Kumar Varma',
-    createdAt: '2026-09-14T10:00:00.000Z',
-    fields: [
-      { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
-      { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
-      { id: 'doc_iso', label: 'ISO Certificate', type: 'file', docType: 'iso', required: true },
-      { id: 'doc_turnover', label: 'Turnover Certificate', type: 'file', docType: 'turnover', required: true }
-    ]
-  },
-  {
-    id: 'TN/2026/006',
-    title: 'Road Construction Materials',
-    description: 'Bulk supply of aggregate stones, bitumen emulsion, cement, and reinforced steel bars for state highway paving.',
-    department: 'Public Works Department',
-    budget: '₹15.75 Crores',
-    publishedDate: '12 Sep 2026',
-    closingDate: '28 Sep 2026',
-    deadline: '2026-09-28',
-    status: 'Active',
-    created_by_officer_name: 'Dr. Rajesh Kumar Varma',
-    createdAt: '2026-09-12T10:00:00.000Z',
-    fields: [
-      { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
-      { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
-      { id: 'doc_financial', label: 'Financial Statement', type: 'file', docType: 'financial', required: true }
-    ]
+
+// Helper to extract volatile/dynamic tender dates with a 7-8 day closing date gap
+export const getVolatileTenderDates = (tender) => {
+  if (!tender) return { publishedDate: 'Today', closingDate: 'In 8 Days', deadline: '' };
+
+  let pubDateObj = new Date();
+  
+  if (tender.publishedDate) {
+    const parsed = new Date(tender.publishedDate);
+    if (!isNaN(parsed.getTime())) pubDateObj = parsed;
+  } else if (tender.createdAt) {
+    const parsed = new Date(tender.createdAt);
+    if (!isNaN(parsed.getTime())) pubDateObj = parsed;
   }
-];
+
+  const pubDay = String(pubDateObj.getDate()).padStart(2, '0');
+  const pubMonthName = pubDateObj.toLocaleString('en-US', { month: 'short' });
+  const pubYear = pubDateObj.getFullYear();
+  const formattedPublished = `${pubDay} ${pubMonthName} ${pubYear}`;
+
+  // Always compute closing date as Published Date + 7 to 8 days gap!
+  const closeDateObj = new Date(pubDateObj);
+  closeDateObj.setDate(closeDateObj.getDate() + 8);
+
+  const closeDay = String(closeDateObj.getDate()).padStart(2, '0');
+  const closeMonthName = closeDateObj.toLocaleString('en-US', { month: 'short' });
+  const closeYear = closeDateObj.getFullYear();
+  const formattedClosing = `${closeDay} ${closeMonthName} ${closeYear}`;
+
+  const deadlineIso = closeDateObj.toISOString().split('T')[0];
+
+  return {
+    publishedDate: tender.publishedDate || formattedPublished,
+    closingDate: formattedClosing,
+    deadline: tender.deadline || deadlineIso,
+    publishedDateObj: pubDateObj,
+    closingDateObj: closeDateObj
+  };
+};
+
+const createDynamicInitialTenders = () => {
+  const now = new Date();
+  const getRelativeDateStr = (daysOffset) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() + daysOffset);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = d.toLocaleString('en-US', { month: 'short' });
+    const year = d.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
+  return [
+    {
+      id: 'TN/2026/001',
+      title: 'Supply of IT Equipment',
+      description: 'Procurement and delivery of laptops, desktop computers, server racks, and peripherals for government IT modernization.',
+      department: 'Department of Information Technology',
+      budget: '₹4.50 Crores',
+      publishedDate: getRelativeDateStr(0),
+      closingDate: getRelativeDateStr(8),
+      deadline: new Date(now.getTime() + 8*24*60*60*1000).toISOString().split('T')[0],
+      status: 'New',
+      created_by_officer_name: 'Dr. Rajesh Kumar Varma',
+      createdAt: now.toISOString(),
+      fields: [
+        { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
+        { id: 'f_2', label: 'Bid Amount (INR)', type: 'text', required: true },
+        { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
+        { id: 'doc_pan', label: 'PAN Card', type: 'file', docType: 'pan', required: true },
+        { id: 'doc_financial', label: 'Financial Statement', type: 'file', docType: 'financial', required: true }
+      ]
+    },
+    {
+      id: 'TN/2026/002',
+      title: 'Office Furniture Procurement',
+      description: 'Supply of ergonomic chairs, modular desks, conference tables, and storage cabinets for public works office complex.',
+      department: 'Public Works Department',
+      budget: '₹1.80 Crores',
+      publishedDate: getRelativeDateStr(-1),
+      closingDate: getRelativeDateStr(7),
+      deadline: new Date(now.getTime() + 7*24*60*60*1000).toISOString().split('T')[0],
+      status: 'New',
+      created_by_officer_name: 'Dr. Rajesh Kumar Varma',
+      createdAt: new Date(now.getTime() - 1*24*60*60*1000).toISOString(),
+      fields: [
+        { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
+        { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
+        { id: 'doc_msme', label: 'MSME Certificate', type: 'file', docType: 'msme', required: true }
+      ]
+    },
+    {
+      id: 'TN/2026/003',
+      title: 'Network Infrastructure',
+      description: 'Establishment of high-speed optical fiber backbone, managed network switches, firewall security, and Wi-Fi access points.',
+      department: 'National Informatics Centre',
+      budget: '₹12.50 Crores',
+      publishedDate: getRelativeDateStr(-2),
+      closingDate: getRelativeDateStr(6),
+      deadline: new Date(now.getTime() + 6*24*60*60*1000).toISOString().split('T')[0],
+      status: 'New',
+      created_by_officer_name: 'Dr. Rajesh Kumar Varma',
+      createdAt: new Date(now.getTime() - 2*24*60*60*1000).toISOString(),
+      fields: [
+        { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
+        { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
+        { id: 'doc_iso', label: 'ISO Certificate', type: 'file', docType: 'iso', required: true },
+        { id: 'doc_oem', label: 'OEM Authorization', type: 'file', docType: 'oem', required: true }
+      ]
+    },
+    {
+      id: 'TN/2026/004',
+      title: 'Supply and Installation of CCTV Systems',
+      description: 'Turnkey installation of IP-based CCTV surveillance cameras, control center video wall, and AI video analytics software.',
+      department: 'Home Department',
+      budget: '₹8.20 Crores',
+      publishedDate: getRelativeDateStr(-1),
+      closingDate: getRelativeDateStr(7),
+      deadline: new Date(now.getTime() + 7*24*60*60*1000).toISOString().split('T')[0],
+      status: 'Active',
+      created_by_officer_name: 'Dr. Rajesh Kumar Varma',
+      createdAt: new Date(now.getTime() - 1*24*60*60*1000).toISOString(),
+      fields: [
+        { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
+        { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
+        { id: 'doc_bis', label: 'BIS Certificate', type: 'file', docType: 'bis', required: true }
+      ]
+    },
+    {
+      id: 'TN/2026/005',
+      title: 'Medical Equipment Supply',
+      description: 'Procurement of diagnostic imaging machines, patient monitors, ICU ventilators, and lab equipment for district hospitals.',
+      department: 'Health & Family Welfare',
+      budget: '₹24.00 Crores',
+      publishedDate: getRelativeDateStr(-3),
+      closingDate: getRelativeDateStr(5),
+      deadline: new Date(now.getTime() + 5*24*60*60*1000).toISOString().split('T')[0],
+      status: 'Active',
+      created_by_officer_name: 'Dr. Rajesh Kumar Varma',
+      createdAt: new Date(now.getTime() - 3*24*60*60*1000).toISOString(),
+      fields: [
+        { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
+        { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
+        { id: 'doc_iso', label: 'ISO Certificate', type: 'file', docType: 'iso', required: true },
+        { id: 'doc_turnover', label: 'Turnover Certificate', type: 'file', docType: 'turnover', required: true }
+      ]
+    },
+    {
+      id: 'TN/2026/006',
+      title: 'Road Construction Materials',
+      description: 'Bulk supply of aggregate stones, bitumen emulsion, cement, and reinforced steel bars for state highway paving.',
+      department: 'Public Works Department',
+      budget: '₹15.75 Crores',
+      publishedDate: getRelativeDateStr(-2),
+      closingDate: getRelativeDateStr(6),
+      deadline: new Date(now.getTime() + 6*24*60*60*1000).toISOString().split('T')[0],
+      status: 'Active',
+      created_by_officer_name: 'Dr. Rajesh Kumar Varma',
+      createdAt: new Date(now.getTime() - 2*24*60*60*1000).toISOString(),
+      fields: [
+        { id: 'f_1', label: 'Vendor Name', type: 'text', required: true },
+        { id: 'doc_gst', label: 'GST Certificate', type: 'file', docType: 'gst', required: true },
+        { id: 'doc_financial', label: 'Financial Statement', type: 'file', docType: 'financial', required: true }
+      ]
+    }
+  ];
+};
+
+export const INITIAL_TENDERS = createDynamicInitialTenders();
+
 
 export const useTenderContext = () => useContext(TenderContext);
 
@@ -314,9 +369,14 @@ export const TenderProvider = ({ children }) => {
   }, [submissions]);
 
   const addTender = async (tender, activeOfficer) => {
+    const dates = getVolatileTenderDates({ publishedDate: tender.publishedDate || new Date().toISOString() });
+    
     const newTender = {
       ...tender,
       id: 't_' + Date.now(),
+      publishedDate: dates.publishedDate,
+      closingDate: dates.closingDate,
+      deadline: dates.deadline,
       created_by_officer_id: activeOfficer?.id || 'usr_officer',
       created_by_officer_name: activeOfficer?.name || activeOfficer?.full_name || 'Government Officer',
       createdAt: new Date().toISOString()
@@ -331,7 +391,7 @@ export const TenderProvider = ({ children }) => {
         description: tender.description || '',
         department: tender.department || 'Ministry of Infrastructure',
         budget: tender.budget || 'N/A',
-        deadline: tender.deadline || '2026-12-31',
+        deadline: dates.deadline,
         created_by_officer_id: activeOfficer?.id || 'usr_officer',
         created_by_officer_name: activeOfficer?.name || activeOfficer?.full_name || 'Government Officer',
         fields: tender.fields || []

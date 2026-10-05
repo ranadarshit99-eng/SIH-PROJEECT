@@ -8,7 +8,7 @@ import {
   ChevronRight, ChevronDown, Calendar, Landmark, CreditCard, RefreshCw, Eye, Sparkles,
   Shield, Check, ArrowUpRight, Lock, FileSpreadsheet, Percent, Info, ArrowRight
 } from 'lucide-react';
-import { useTenderContext, STANDARD_DOCUMENTS } from '../context/TenderContext';
+import { useTenderContext, STANDARD_DOCUMENTS, getVolatileTenderDates } from '../context/TenderContext';
 import { useAuth } from '../context/AuthContext';
 import { API_BASE } from '../apiConfig';
 import UserHeader from '../components/UserHeader';
@@ -382,7 +382,7 @@ const Bidder = () => {
                     <div>
                       <span className="text-[10px] text-slate-500 font-extrabold block uppercase tracking-wider">Submission Deadline</span>
                       <span className="text-sm font-extrabold text-slate-900 leading-tight block">
-                        {applyingTender.closingDate || applyingTender.deadline || '30 Sep 2026'}
+                        {getVolatileTenderDates(applyingTender).closingDate}
                       </span>
                     </div>
                   </div>
@@ -861,7 +861,7 @@ const Bidder = () => {
 
                               <div className="flex items-center justify-between">
                                 <span className="text-slate-400 font-bold text-[11px]">Closing Deadline</span>
-                                <span className="font-extrabold text-slate-800">{tender.closingDate || tender.deadline || '30 Sep 2026'}</span>
+                                <span className="font-extrabold text-slate-800">{getVolatileTenderDates(tender).closingDate}</span>
                               </div>
                             </div>
 
