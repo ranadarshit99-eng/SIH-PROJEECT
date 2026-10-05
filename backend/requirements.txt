@@ -2,6 +2,8 @@ fastapi
 uvicorn
 python-multipart
 pymupdf
+PyPDF2
+pypdf
 python-docx
 openpyxl
 python-pptx
