@@ -143,9 +143,9 @@ export const resolveDocumentVerification = (field, fileName, existingVerif, bidd
 };
 
 
-// Helper to extract volatile/dynamic tender dates with a 7-8 day closing date gap
+// Helper to extract volatile/dynamic tender dates with custom officer deadline & expiry checking
 export const getVolatileTenderDates = (tender) => {
-  if (!tender) return { publishedDate: 'Today', closingDate: 'In 8 Days', deadline: '' };
+  if (!tender) return { publishedDate: 'Today', closingDate: 'In 8 Days', deadline: '', isExpired: false };
 
   let pubDateObj = new Date();
   
@@ -162,9 +162,19 @@ export const getVolatileTenderDates = (tender) => {
   const pubYear = pubDateObj.getFullYear();
   const formattedPublished = `${pubDay} ${pubMonthName} ${pubYear}`;
 
-  // Always compute closing date as Published Date + 7 to 8 days gap!
-  const closeDateObj = new Date(pubDateObj);
-  closeDateObj.setDate(closeDateObj.getDate() + 8);
+  let closeDateObj;
+  if (tender.deadline) {
+    const parsedDl = new Date(tender.deadline);
+    if (!isNaN(parsedDl.getTime())) {
+      closeDateObj = parsedDl;
+    } else {
+      closeDateObj = new Date(pubDateObj);
+      closeDateObj.setDate(closeDateObj.getDate() + 8);
+    }
+  } else {
+    closeDateObj = new Date(pubDateObj);
+    closeDateObj.setDate(closeDateObj.getDate() + 8);
+  }
 
   const closeDay = String(closeDateObj.getDate()).padStart(2, '0');
   const closeMonthName = closeDateObj.toLocaleString('en-US', { month: 'short' });
@@ -173,12 +183,17 @@ export const getVolatileTenderDates = (tender) => {
 
   const deadlineIso = closeDateObj.toISOString().split('T')[0];
 
+  const deadlineEnd = new Date(closeDateObj);
+  deadlineEnd.setHours(23, 59, 59, 999);
+  const isExpired = new Date() > deadlineEnd;
+
   return {
     publishedDate: tender.publishedDate || formattedPublished,
-    closingDate: formattedClosing,
+    closingDate: tender.closingDate || formattedClosing,
     deadline: tender.deadline || deadlineIso,
     publishedDateObj: pubDateObj,
-    closingDateObj: closeDateObj
+    closingDateObj: closeDateObj,
+    isExpired
   };
 };
 
@@ -429,6 +444,35 @@ export const TenderProvider = ({ children }) => {
     }
   };
 
+  const updateTenderDeadline = async (tenderId, newDeadline) => {
+    const dObj = new Date(newDeadline);
+    const day = String(dObj.getDate()).padStart(2, '0');
+    const monthName = dObj.toLocaleString('en-US', { month: 'short' });
+    const year = dObj.getFullYear();
+    const formattedClosing = `${day} ${monthName} ${year}`;
+
+    setTenders(prev => prev.map(t => {
+      if (t.id === tenderId) {
+        return {
+          ...t,
+          deadline: newDeadline,
+          closingDate: formattedClosing
+        };
+      }
+      return t;
+    }));
+
+    try {
+      await fetch(`${API_BASE}/tenders/update-deadline`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tender_id: tenderId, deadline: newDeadline, closing_date: formattedClosing }),
+      });
+    } catch (err) {
+      console.warn("DB deadline update notice:", err);
+    }
+  };
+
   const deleteSubmission = async (submissionId) => {
     setSubmissions(prev => prev.filter(s => s.id !== submissionId));
 
@@ -494,6 +538,7 @@ export const TenderProvider = ({ children }) => {
       tenders,
       addTender,
       deleteTender,
+      updateTenderDeadline,
       submissions,
       submitApplication,
       deleteSubmission,

@@ -184,6 +184,12 @@ const Bidder = () => {
     e.preventDefault();
     if (!applyingTender) return;
 
+    const tenderDates = getVolatileTenderDates(applyingTender);
+    if (tenderDates.isExpired) {
+      alert("Submission deadline for this tender has passed. Submissions are closed.");
+      return;
+    }
+
     submitApplication(applyingTender.id, formData, verificationData, filesMap, activeBidder);
     setSubmitted(true);
 
@@ -516,12 +522,19 @@ const Bidder = () => {
                   <div className="text-xs text-slate-500 font-medium">
                     Submitting Application for: <strong className="text-slate-900 font-extrabold">{activeBidder.name}</strong>
                   </div>
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto px-10 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-2xl shadow-md transition-all hover:scale-[1.01]"
-                  >
-                    Submit Encrypted Application Package
-                  </button>
+                  {getVolatileTenderDates(applyingTender).isExpired ? (
+                    <div className="w-full sm:w-auto px-8 py-3.5 bg-rose-50 border border-rose-200 text-rose-700 font-extrabold text-xs rounded-2xl flex items-center justify-center gap-2">
+                      <Lock size={16} />
+                      <span>Submission Closed (Deadline Passed)</span>
+                    </div>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="w-full sm:w-auto px-10 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-2xl shadow-md transition-all hover:scale-[1.01]"
+                    >
+                      Submit Encrypted Application Package
+                    </button>
+                  )}
                 </div>
               </form>
             </div>
@@ -861,7 +874,9 @@ const Bidder = () => {
 
                               <div className="flex items-center justify-between">
                                 <span className="text-slate-400 font-bold text-[11px]">Closing Deadline</span>
-                                <span className="font-extrabold text-slate-800">{getVolatileTenderDates(tender).closingDate}</span>
+                                <span className={`font-extrabold ${getVolatileTenderDates(tender).isExpired ? 'text-rose-600 font-extrabold' : 'text-slate-800'}`}>
+                                  {getVolatileTenderDates(tender).closingDate} {getVolatileTenderDates(tender).isExpired && '(Closed)'}
+                                </span>
                               </div>
                             </div>
 
@@ -870,16 +885,27 @@ const Bidder = () => {
                                 <ShieldCheck size={16} className="text-blue-600" />
                                 {tender.fields?.filter(f => f.type === 'file').length || 3} Required Docs
                               </span>
-                              <span className="text-[10px] bg-slate-100 text-slate-800 border border-slate-200 px-2 py-0.5 rounded font-extrabold">
-                                Official Verification
+                              <span className={`text-[10px] px-2 py-0.5 rounded font-extrabold border ${
+                                getVolatileTenderDates(tender).isExpired
+                                  ? 'bg-rose-100 text-rose-800 border-rose-200'
+                                  : 'bg-slate-100 text-slate-800 border-slate-200'
+                              }`}>
+                                {getVolatileTenderDates(tender).isExpired ? 'Closed' : 'Official Verification'}
                               </span>
                             </div>
                           </div>
 
-                          <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                            <span>{hasApplied ? 'View & Re-apply Tender' : 'Open Full Application Page'}</span>
-                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                          </div>
+                          {getVolatileTenderDates(tender).isExpired ? (
+                            <div className="bg-rose-50/80 px-6 py-4 border-t border-rose-100 flex items-center justify-between text-xs font-extrabold text-rose-700">
+                              <span>Submission Closed (Deadline Passed)</span>
+                              <Lock size={16} />
+                            </div>
+                          ) : (
+                            <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                              <span>{hasApplied ? 'View & Re-apply Tender' : 'Open Full Application Page'}</span>
+                              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                            </div>
+                          )}
                         </div>
                       );
                     })

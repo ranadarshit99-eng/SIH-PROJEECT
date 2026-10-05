@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Plus, Trash2, Save, FileText, CheckCircle2, AlertTriangle,
   Building2, Users, FileCheck2, Eye, ShieldAlert, X, ChevronRight, Layers, DollarSign, RotateCcw,
   Home, FileSearch, User, LogOut, Bell, Calendar, Download, Settings, ClipboardList, Search, Landmark, Sparkles, Cpu,
-  Award, TrendingUp, ThumbsUp, Globe, MessageSquare, ShieldCheck
+  Award, TrendingUp, ThumbsUp, Globe, MessageSquare, ShieldCheck, Lock, Edit3
 } from 'lucide-react';
 import { useTenderContext, STANDARD_DOCUMENTS, resolveDocumentVerification, getVolatileTenderDates } from '../context/TenderContext';
 import { useAuth } from '../context/AuthContext';
@@ -26,7 +26,7 @@ const getGenuineMismatches = (mismatches) => {
 const Government = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { tenders, addTender, deleteTender, submissions, deleteSubmission } = useTenderContext();
+  const { tenders, addTender, deleteTender, updateTenderDeadline, submissions, deleteSubmission } = useTenderContext();
 
   // Navigation state: 'dashboard', 'manage', 'inspection', 'profile'
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -37,7 +37,16 @@ const Government = () => {
   const [title, setTitle] = useState('');
   const [department, setDepartment] = useState('Ministry of Electronics & Information Technology');
   const [budget, setBudget] = useState('');
+  const [deadline, setDeadline] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 8);
+    return d.toISOString().split('T')[0];
+  });
   const [description, setDescription] = useState('');
+
+  // Modify / Extend Tender Deadline State
+  const [editingDeadlineTender, setEditingDeadlineTender] = useState(null);
+  const [newDeadlineInput, setNewDeadlineInput] = useState('');
 
   // Tender PDF & Notice Extractor State
   const [isExtractingPdf, setIsExtractingPdf] = useState(false);
@@ -371,6 +380,7 @@ const Government = () => {
       title,
       department,
       budget,
+      deadline,
       description,
       fields: allFields
     }, user);
@@ -379,6 +389,9 @@ const Government = () => {
     setTitle('');
     setBudget('');
     setDescription('');
+    const defaultDl = new Date();
+    defaultDl.setDate(defaultDl.getDate() + 8);
+    setDeadline(defaultDl.toISOString().split('T')[0]);
     setSelectedDocs(['gst', 'pan', 'financial']);
 
     setTimeout(() => {
@@ -612,6 +625,17 @@ const Government = () => {
                                 {tender.id}
                               </span>
                               <span className="text-[11px] text-slate-500 font-medium">Closing Date: {getVolatileTenderDates(tender).closingDate}</span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingDeadlineTender(tender);
+                                  setNewDeadlineInput(getVolatileTenderDates(tender).deadline || '');
+                                }}
+                                className="text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded border border-blue-200 transition-colors ml-1 cursor-pointer flex items-center gap-1"
+                              >
+                                <Edit3 size={11} />
+                                <span>Extend</span>
+                              </button>
                             </div>
                             <h3 className="font-bold text-slate-900 text-sm mt-1 leading-snug">
                               {tender.title}
@@ -918,15 +942,28 @@ const Government = () => {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Allocated Budget / Project Estimate</label>
-                  <input
-                    type="text"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-xs font-semibold text-slate-900 bg-slate-50/50"
-                    placeholder="e.g., ₹120 Crores"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Allocated Budget / Project Estimate</label>
+                    <input
+                      type="text"
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-xs font-semibold text-slate-900 bg-slate-50/50"
+                      placeholder="e.g., ₹120 Crores"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Submission Deadline *</label>
+                    <input
+                      type="date"
+                      required
+                      value={deadline}
+                      onChange={(e) => setDeadline(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-xs font-semibold text-slate-900 bg-slate-50/50"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -1357,7 +1394,19 @@ const Government = () => {
               </div>
               <div className="border-l border-slate-200 pl-4">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block">Closing Date</span>
-                <span className="font-extrabold text-slate-800">{getVolatileTenderDates(selectedTenderForReview).closingDate}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-slate-800">{getVolatileTenderDates(selectedTenderForReview).closingDate}</span>
+                  <button
+                    onClick={() => {
+                      setEditingDeadlineTender(selectedTenderForReview);
+                      setNewDeadlineInput(getVolatileTenderDates(selectedTenderForReview).deadline || '');
+                    }}
+                    className="text-[10px] font-bold text-blue-600 bg-blue-100/80 hover:bg-blue-200/80 px-2 py-0.5 rounded border border-blue-200 transition-colors cursor-pointer flex items-center gap-1"
+                  >
+                    <Edit3 size={11} />
+                    <span>Extend</span>
+                  </button>
+                </div>
               </div>
               <div className="border-l border-slate-200 pl-4">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block">Bids Received</span>
@@ -2446,6 +2495,64 @@ const Government = () => {
               </div>
             </div>
 
+          </div>
+        </div>
+      )}
+      {/* Extend / Modify Tender Deadline Modal */}
+      {editingDeadlineTender && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl border border-slate-200 max-w-md w-full p-6 shadow-2xl space-y-4 text-slate-800">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Calendar size={18} className="text-blue-600" />
+                <span>Extend / Modify Tender Submission Deadline</span>
+              </h3>
+              <button onClick={() => setEditingDeadlineTender(null)} className="text-slate-400 hover:text-slate-600">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div>
+              <p className="text-xs text-slate-600 mb-3 font-medium">
+                Tender ID: <strong className="font-mono text-blue-700">{editingDeadlineTender.id}</strong>
+                <br />
+                <span className="font-semibold text-slate-900">{editingDeadlineTender.title}</span>
+              </p>
+
+              <label className="block text-xs font-bold text-slate-700 mb-1">New Submission Deadline Date *</label>
+              <input
+                type="date"
+                value={newDeadlineInput}
+                onChange={(e) => setNewDeadlineInput(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 text-slate-900"
+              />
+              <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                Extending this deadline will update the procurement schedule across all bidder portals immediately.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+              <button
+                onClick={() => setEditingDeadlineTender(null)}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (newDeadlineInput) {
+                    updateTenderDeadline(editingDeadlineTender.id, newDeadlineInput);
+                    if (selectedTenderForReview?.id === editingDeadlineTender.id) {
+                      setSelectedTenderForReview(prev => ({ ...prev, deadline: newDeadlineInput }));
+                    }
+                    setEditingDeadlineTender(null);
+                  }
+                }}
+                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
+              >
+                Save & Extend Deadline
+              </button>
+            </div>
           </div>
         </div>
       )}

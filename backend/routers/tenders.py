@@ -57,6 +57,30 @@ def create_tender(payload: TenderCreateSchema):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create tender in DB: {str(e)}")
 
+class DeadlineUpdateSchema(BaseModel):
+    tender_id: str
+    deadline: str
+    closing_date: Optional[str] = None
+
+@router.post("/update-deadline")
+def update_tender_deadline(payload: DeadlineUpdateSchema):
+    """Officer modifies/extends the submission deadline of a published tender."""
+    try:
+        with engine.begin() as conn:
+            conn.execute(
+                text("UPDATE government_tenders SET deadline = :deadline WHERE id = :id"),
+                {"deadline": payload.deadline, "id": payload.tender_id}
+            )
+        return {
+            "success": True,
+            "tender_id": payload.tender_id,
+            "deadline": payload.deadline,
+            "message": f"Tender {payload.tender_id} deadline extended to {payload.deadline} successfully."
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update tender deadline: {str(e)}")
+
+
 @router.get("/all")
 def get_all_tenders():
     """Fetch all released tenders along with linked bidder applications."""
